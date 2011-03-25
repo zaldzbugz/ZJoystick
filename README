@@ -1,4 +1,4 @@
-//COCOS2D zJoystick API
+//COCOS2D zJoystick API (Version1.0)
 //Interface and Implementation Files (REQUIRED)
 Joystick.h - joystick interface file
 Joystick.m - joystick implementation file
