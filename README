@@ -1,9 +1,9 @@
 //COCOS2D zJoystick API
-//Interface and Implementation Files
+//Interface and Implementation Files (REQUIRED)
 Joystick.h - joystick interface file
 Joystick.m - joystick implementation file
 
-//Sample Image files used for the sample below
+//Sample Image files used in the example code below 
 Joystick_norm.png - (Our Joystick)
 JoystickContainer_trans.png - rest state (Joystick Container, serves as the Joystick background)
 JoystickContainer_norm.png - active state (Joystick Container, serves as the Joystick background)
@@ -14,7 +14,7 @@ HOW TO USE
 1.) import Joystick header file -> #import "Joystick.h"
 2.) then add these codes below to any of your scenes
 
-//------------------------------------------------------START---------------------------------------------------------------------
+//------------------------------------------------------START------------------------------------------------
 
 //Controlled Object
 CCSprite *controlledSprite  = [CCSprite spriteWithFile:@"Joystick_norm.png"];
@@ -29,8 +29,7 @@ _joystick.controlledObject  = controlledSprite;     //we set our controlled obje
 _joystick.speedRatio         = 2.0f;                    //we set speed ratio, movement speed of blue circle once controlled to any direction
 [self addChild:_joystick];
 
-
-//----------------------------------------------------END-----------------------------------------------------------------------
+//----------------------------------------------------END----------------------------------------------------
 
 //You can see the blue circle at the center and the joystick at the lower left corner
 //try controlling the joystick and you can see this blue circle moving as you please.
