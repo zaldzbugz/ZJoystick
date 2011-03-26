@@ -1,0 +1,39 @@
+//COCOS2D zJoystick API (Version1.0)
+//Interface and Implementation Files (REQUIRED)
+Joystick.h - joystick interface file
+Joystick.m - joystick implementation file
+
+//Sample Image files used in the example code below 
+Joystick_norm.png - (Our Joystick)
+JoystickContainer_trans.png - rest state (Joystick Container, serves as the Joystick background)
+JoystickContainer_norm.png - active state (Joystick Container, serves as the Joystick background)
+
+
+HOW TO USE
+
+1.) import Joystick header file -> #import "Joystick.h"
+2.) then add these codes below to any of your scenes
+
+//------------------------------------------------------START------------------------------------------------
+
+//Controlled Object
+CCSprite *controlledSprite  = [CCSprite spriteWithFile:@"Joystick_norm.png"];
+controlledSprite.position   = ccp(winSize.width/2, winSize.height/2);   
+[self addChild:controlledSprite];
+        
+//Joystick
+Joystick *_joystick	= [Joystick joystickNormalSpriteFile:@"JoystickContainer_norm.png" selectedSpriteFile:@"JoystickContainer_trans.png" controllerSpriteFile:@"Joystick_norm.png"];
+_joystick.position	= ccp(_joystick.contentSize.width/2, _joystick.contentSize.height/2);
+_joystick.delegate	= self;				//Joystick Delegate
+_joystick.controlledObject  = controlledSprite;     //we set our controlled object which the blue circle
+_joystick.speedRatio         = 2.0f;                    //we set speed ratio, movement speed of blue circle once controlled to any direction
+[self addChild:_joystick];
+
+//----------------------------------------------------END----------------------------------------------------
+
+//You can see the blue circle at the center and the joystick at the lower left corner
+//try controlling the joystick and you can see this blue circle moving as you please.
+
+ZaldzBugz
+zbnb@yahoo.com
+http://twitter.com/zaldzbugz
