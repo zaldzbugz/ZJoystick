@@ -34,6 +34,10 @@ _joystick.speedRatio         = 2.0f;                    //we set speed ratio, mo
 //You can see the blue circle at the center and the joystick at the lower left corner
 //try controlling the joystick and you can see this blue circle moving as you please.
 
+
+//ZIP file
+Added a ZIP file there (zJoystick.zip) which is a sample project that you could use.
+
 ZaldzBugz
 zbnb@yahoo.com
 http://twitter.com/zaldzbugz
