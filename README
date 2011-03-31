@@ -1,3 +1,7 @@
+//COCOS2D zJoystick API (Version1.1)
+[Version 1.1 Updates]
+1.) Updated the API to allow more than one joysticks in a screen to control   object(s).
+
 //COCOS2D zJoystick API (Version1.0)
 //Interface and Implementation Files (REQUIRED)
 Joystick.h - joystick interface file
@@ -37,6 +41,7 @@ _joystick.speedRatio         = 2.0f;                    //we set speed ratio, mo
 
 //ZIP file
 Added a ZIP file there (zJoystick.zip) which is a sample project that you could use.
+
 
 ZaldzBugz
 zbnb@yahoo.com
