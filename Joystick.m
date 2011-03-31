@@ -265,13 +265,14 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 		[self activateScheduler];
 		
 		
+		return YES;
 	}
 	
 	CCLOG(@"Quadrant = %d", _controlQuadrant);
 	
 
 	
-	return YES; //we return yes to gain access control of MOVE and ENDED delegate methods
+	return NO; //we return yes to gain access control of MOVE and ENDED delegate methods
 }
 
  - (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event{
