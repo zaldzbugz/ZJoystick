@@ -77,7 +77,7 @@ CGFloat getDistanceBetweenTwoPoints(CGPoint point1,CGPoint point2)
 }
 
 tControlQuadrant getQuadrantForPoint (CGPoint point) {
-
+	
 	tControlQuadrant controlQuadrant;
 	
 	//Quadrants setup
@@ -184,14 +184,14 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	l_controlledObject.position = ccp(l_controlledObject.position.x + xSpeedRatio, l_controlledObject.position.y + ySpeedRatio);
 	
 	/*
-	//check if our object does not reach the screen borders
-	if (cPoint.x >= xMinLimit && cPoint.x <= xMaxLimit && cPoint.y >= yMinLimit && cPoint.y <= yMaxLimit) {
-		//N = point * 1 / kJoystickRadius
-		CGFloat xSpeedRatio = _controllerActualPoint.x / kJoystickRadius;
-		CGFloat ySpeedRatio = _controllerActualPoint.y / kJoystickRadius;
-		
-		l_controlledObject.position = ccp(l_controlledObject.position.x + xSpeedRatio, l_controlledObject.position.y + ySpeedRatio);
-	}
+	 //check if our object does not reach the screen borders
+	 if (cPoint.x >= xMinLimit && cPoint.x <= xMaxLimit && cPoint.y >= yMinLimit && cPoint.y <= yMaxLimit) {
+	 //N = point * 1 / kJoystickRadius
+	 CGFloat xSpeedRatio = _controllerActualPoint.x / kJoystickRadius;
+	 CGFloat ySpeedRatio = _controllerActualPoint.y / kJoystickRadius;
+	 
+	 l_controlledObject.position = ccp(l_controlledObject.position.x + xSpeedRatio, l_controlledObject.position.y + ySpeedRatio);
+	 }
 	 */
 }
 
@@ -225,9 +225,11 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	//this is when the touch is inside the joystick
 	CGFloat actualPointDistance = getDistanceBetweenTwoPoints(self.position, location);
 	
+    NSLog(@"Actual Distance - %f", actualPointDistance);
+    
 	//check if the touch point is within the joystick container's radius
 	if (actualPointDistance <= kJoystickRadius){
-	//if (CGRectContainsPoint(rect, location)) {
+		//if (CGRectContainsPoint(rect, location)) {
 		CCLOG(@"Joystick Touched");
 		
 		[_delegate joystickControlBegan];	//call delegate method
@@ -252,7 +254,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 		
 		//jostick button controller
 		_controller.position = ccp(self.contentSize.width/2 + actualPoint.x, self.contentSize.height/2 + actualPoint.y);
-
+		
 		//add fadeIn animation
 		id inAction = [CCFadeIn actionWithDuration:kControlActionInterval];
 		[_controller runAction:inAction];
@@ -264,28 +266,27 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 		//Activate Scheduler
 		[self activateScheduler];
 		
-		
 		return YES;
 	}
 	
 	CCLOG(@"Quadrant = %d", _controlQuadrant);
 	
-
+	
 	
 	return NO; //we return yes to gain access control of MOVE and ENDED delegate methods
 }
 
- - (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event{
+- (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event{
 	CCLOG(@"Joystick ccTouchMoved");
 	CGPoint location	= [touch locationInView: [touch view]];
 	location			= [[CCDirector sharedDirector] convertToGL:location];
 	//CGRect rect			= [self getBoundingRect];
-
+	
 	
 	CGPoint actualPoint = CGPointMake(location.x - self.position.x, location.y - self.position.y);
 	
 	
-	 
+	
 	if (isCurrentlyControlling) {
 		
 		//execute our delegate method
@@ -331,10 +332,10 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 			//means that we are in the 4th Quadrant
 			if (slope == -INFINITY) {
 				point = ccp(0 , -kJoystickRadius);
-			//3rd Quadrant
+				//3rd Quadrant
 			} else if (slope == INFINITY) {
 				point = ccp(0 , kJoystickRadius);
-			//1st & 2nd Quadrant
+				//1st & 2nd Quadrant
 			} else {
 				//no matter if SLOPE and DISTANCE are (-), it would still result a positive value since they are computed by ^2
 				point = getCPoint(slope, kJoystickRadius);
@@ -344,7 +345,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 			//We check our actual points if we reach points of in 3rd Quadrant
 			if (actualPoint.x < 0 && actualPoint.y >= 0) {
 				point = CGPointMake(-1 * point.x, point.y * -1);
-			//We check our actual points if we reach points of in 4th Quadrant
+				//We check our actual points if we reach points of in 4th Quadrant
 			} else if (actualPoint.x < 0 && actualPoint.y <= 0) {
 				point = CGPointMake(-1 * point.x, -1 * point.y);
 			}
@@ -362,7 +363,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 			//we position out controller
 			_controller.position = controllerPoint;
 		}
-	
+		
 		//Quadrants
 		self.controlQuadrant = getQuadrantForPoint(actualPoint);
 		
@@ -370,6 +371,14 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	}
 	
 	//CCLOG(@"Quadrant = %d", _controlQuadrant);
+}
+
+
+//Thanks to Joey Hengst for this update.
+//this will allow more than one joysticks in a screen both simulator and device
+- (void)ccTouchCancelled:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    [self ccTouchEnded:touch withEvent:event];
 }
 
 -(void) ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
@@ -439,7 +448,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	self.selectedTexture    = nil;
 	self.controlledObject   = nil;
 	self.delegate           = nil;
-   
+	
 	[super dealloc];
 }
 
