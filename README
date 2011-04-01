@@ -9,6 +9,7 @@ ZJoystick.h - joystick interface file
 ZJoystick.m - joystick implementation file
 
 //Sample Image files used in the example code below 
+background.png - screen background
 Joystick_norm.png - (Our Joystick)
 JoystickContainer_trans.png - rest state (Joystick Container, serves as the Joystick background)
 JoystickContainer_norm.png - active state (Joystick Container, serves as the Joystick background)
