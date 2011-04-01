@@ -42,7 +42,7 @@ _joystick.speedRatio         = 2.0f;                    //we set speed ratio, mo
 
 
 //ZIP file
-Added a ZIP file there (zJoystick.zip) which is a sample project that you could use.
+Added a ZIP file there (MyJoystick.zip) which is a sample project that you could use.
 
 
 ZaldzBugz
