@@ -1,6 +1,7 @@
 //COCOS2D zJoystick API (Version1.1)
 [Version 1.1 Updates]
 1.) Updated the API to allow more than one joysticks in a screen to control   object(s).
+2.) Added ccTouchCancelled that calls the ccTouchEnded to allow other joysticks to work (Thanks to Joey Hengst for pointing this out)
 
 //COCOS2D zJoystick API (Version1.0)
 //Interface and Implementation Files (REQUIRED)
