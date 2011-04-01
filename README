@@ -5,8 +5,8 @@
 
 //COCOS2D zJoystick API (Version1.0)
 //Interface and Implementation Files (REQUIRED)
-Joystick.h - joystick interface file
-Joystick.m - joystick implementation file
+ZJoystick.h - joystick interface file
+ZJoystick.m - joystick implementation file
 
 //Sample Image files used in the example code below 
 Joystick_norm.png - (Our Joystick)
@@ -16,7 +16,7 @@ JoystickContainer_norm.png - active state (Joystick Container, serves as the Joy
 
 HOW TO USE
 
-1.) import Joystick header file -> #import "Joystick.h"
+1.) import Joystick header file -> #import "ZJoystick.h"
 2.) then add these codes below to any of your scenes
 
 //------------------------------------------------------START------------------------------------------------
@@ -27,7 +27,7 @@ controlledSprite.position   = ccp(winSize.width/2, winSize.height/2);
 [self addChild:controlledSprite];
         
 //Joystick
-Joystick *_joystick	= [Joystick joystickNormalSpriteFile:@"JoystickContainer_norm.png" selectedSpriteFile:@"JoystickContainer_trans.png" controllerSpriteFile:@"Joystick_norm.png"];
+ZJoystick *_joystick	= [ZJoystick joystickNormalSpriteFile:@"JoystickContainer_norm.png" selectedSpriteFile:@"JoystickContainer_trans.png" controllerSpriteFile:@"Joystick_norm.png"];
 _joystick.position	= ccp(_joystick.contentSize.width/2, _joystick.contentSize.height/2);
 _joystick.delegate	= self;				//Joystick Delegate
 _joystick.controlledObject  = controlledSprite;     //we set our controlled object which the blue circle
