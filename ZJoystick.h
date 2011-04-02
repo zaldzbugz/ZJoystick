@@ -21,7 +21,7 @@ typedef enum {
 	kFourthQuadrant,
 }tControlQuadrant;
 
-@protocol JoystickDelegate
+@protocol JoystickDelegate<NSObject>
 
 @optional
 -(void)joystickControlBegan;
