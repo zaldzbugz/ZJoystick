@@ -232,7 +232,15 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	//if (CGRectContainsPoint(rect, location)) {
 		CCLOG(@"Joystick Touched");
 		
-		[_delegate joystickControlBegan];	//call delegate method
+        //call delegate method
+        //check if _delegate conforms to the protocol and responds to the selector
+        if ([_delegate conformsToProtocol:@protocol(JoystickDelegate)]) {
+            if([_delegate respondsToSelector:@selector(joystickControlBegan)]) {
+                [_delegate performSelector:@selector(joystickControlBegan)];
+            }
+        }
+        
+		//[_delegate joystickControlBegan];	
 		
 		//Speed ratio
 		//distance of joystick center point to touch point
@@ -289,8 +297,15 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	 
 	if (isCurrentlyControlling) {
 		
-		//execute our delegate method
-		[_delegate joystickControlMoved];
+        //execute our delegate method
+        //check if _delegate conforms to the protocol and responds to the selector
+        if ([_delegate conformsToProtocol:@protocol(JoystickDelegate)]) {
+            if([_delegate respondsToSelector:@selector(joystickControlMoved)]) {
+                [_delegate performSelector:@selector(joystickControlMoved)];
+            }
+        }
+
+		//[_delegate joystickControlMoved];
 		
 		//actual distance of joystick and the touch point
 		//this is when the touch is inside the joystick
@@ -384,7 +399,15 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 -(void) ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
 	CCLOG(@"Joystick ccTouchEnded");
 	
-	[_delegate joystickControlEnded];			//call delegate method
+    //execute our delegate method
+    //check if _delegate conforms to the protocol and responds to the selector
+    if ([_delegate conformsToProtocol:@protocol(JoystickDelegate)]) {
+        if([_delegate respondsToSelector:@selector(joystickControlEnded)]) {
+            [_delegate performSelector:@selector(joystickControlEnded)];
+        }
+    }
+    
+	//[_delegate joystickControlEnded];			//call delegate method
 	
 	//change joystick to transparent image
 	//CCSpriteFrame *frame = [[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"JoystickContainer_trans.png"];
