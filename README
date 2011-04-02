@@ -1,9 +1,15 @@
-//COCOS2D zJoystick API (Version1.1)
+//COCOS2D ZJoystick API (Version1.2)
+[Version 1.1 Updates]
+1.) Updated protocol declaration
+2.) Updated protocol method calls
+3.) Added variable to set values for Joystick Radius
+
+//COCOS2D ZJoystick API (Version1.1)
 [Version 1.1 Updates]
 1.) Updated the API to allow more than one joysticks in a screen to control   object(s).
 2.) Added ccTouchCancelled that calls the ccTouchEnded to allow other joysticks to work (Thanks to Joey Hengst for pointing this out)
 
-//COCOS2D zJoystick API (Version1.0)
+//COCOS2D ZJoystick API (Version1.0)
 //Interface and Implementation Files (REQUIRED)
 ZJoystick.h - joystick interface file
 ZJoystick.m - joystick implementation file
@@ -32,10 +38,23 @@ ZJoystick *_joystick	= [ZJoystick joystickNormalSpriteFile:@"JoystickContainer_n
 _joystick.position	= ccp(_joystick.contentSize.width/2, _joystick.contentSize.height/2);
 _joystick.delegate	= self;				//Joystick Delegate
 _joystick.controlledObject  = controlledSprite;     //we set our controlled object which the blue circle
-_joystick.speedRatio         = 2.0f;                    //we set speed ratio, movement speed of blue circle once controlled to any direction
+_joystick.speedRatio         = 2.0f;                //we set speed ratio, movement speed of blue circle once controlled to any direction
+_joystick.joystickRadius     = 50.0f;               //Added in v1.2
 [self addChild:_joystick];
 
 //----------------------------------------------------END----------------------------------------------------
+
+//JoystickDelegate
+//ZJoystick also has three delegate methods that you could use
+-(void)joystickControlBegan;
+-(void)joystickControlMoved;
+-(void)joystickControlEnded;
+
+//You can implement any of these protocol methods if you want.
+
+-------------------------------------------------------------------------------------------------------------
+
+HERE WE GO!
 
 //You can see the blue circle at the center and the joystick at the lower left corner
 //try controlling the joystick and you can see this blue circle moving as you please.
@@ -47,4 +66,5 @@ Added a ZIP file there (MyJoystick.zip) which is a sample project that you could
 
 ZaldzBugz
 zbnb@yahoo.com
+http://zaldzbugz.posterous.com
 http://twitter.com/zaldzbugz
