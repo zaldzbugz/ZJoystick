@@ -21,7 +21,7 @@ typedef enum {
 	kFourthQuadrant,
 }tControlQuadrant;
 
-@protocol JoystickDelegate<NSObject>
+@protocol ZJoystickDelegate<NSObject>
 
 @optional
 -(void)joystickControlBegan;
@@ -43,13 +43,14 @@ typedef enum {
 	BOOL					isCurrentlyControlling;     //check if we touched inside the container
     BOOL                    _isJostickDisabled;         //Check if joystick is enabled
 	BOOL					_isControlling;             //check if joystick is currently controlling
-	id <JoystickDelegate>	_delegate;                  //delegate
+	id <ZJoystickDelegate>	_delegate;                  //delegate
 	CGFloat					_controllerActualDistance;  //actual distance of controller relative to background and container
 	CGFloat					_speedRatio;                //speed ratio for each joysitkc controller movement
 	CGPoint					_controllerActualPoint;     //controller actual point relative to background
 	id						_controlledObject;          //the object the controller is controlling
-
- 
+    
+    //version 1.2
+    CGFloat                 _joystickRadius;
 }
 
 @property(nonatomic, retain) CCTexture2D				*normalTexture;
@@ -61,11 +62,14 @@ typedef enum {
 
 @property(nonatomic, assign) CCSprite					*controller;
 @property(nonatomic, assign) tControlQuadrant			controlQuadrant;
-@property(nonatomic, retain) id <JoystickDelegate>		delegate;
+@property(nonatomic, retain) id <ZJoystickDelegate>		delegate;
 @property(nonatomic, assign) CGFloat					controllerActualDistance;
 @property(nonatomic, assign) CGFloat					speedRatio;
 @property(nonatomic, assign) CGPoint					controllerActualPoint;
 @property(nonatomic, retain) id							controlledObject;
+
+//version 1.2
+@property(nonatomic, assign) CGFloat                    joystickRadius;
 
 -(CGRect) getBoundingRect;
 -(CGFloat)getYMinimumLimit;
