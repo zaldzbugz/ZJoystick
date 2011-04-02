@@ -27,6 +27,9 @@ CGFloat getDistanceBetweenTwoPoints(CGPoint point1,CGPoint point2);
 @synthesize controllerActualPoint	= _controllerActualPoint;
 @synthesize controlledObject		= _controlledObject;
 
+//version 1.2
+@synthesize joystickRadius          = _joystickRadius;
+
 //m = y2-y1 / x2-x1
 CGFloat getSlope(CGPoint point1, CGPoint point2) {
 	
@@ -145,9 +148,9 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	CGFloat yMinLimit = [self getYMinimumLimit];
 	CGFloat yMaxLimit = [self getYMaximumLimit];
 	
-	//N = point * 1 / kJoystickRadius
-	CGFloat xSpeedRatio = _controllerActualPoint.x / kJoystickRadius;
-	CGFloat ySpeedRatio = _controllerActualPoint.y / kJoystickRadius;
+	//N = point * 1 / _joystickRadius
+	CGFloat xSpeedRatio = _controllerActualPoint.x / _joystickRadius;
+	CGFloat ySpeedRatio = _controllerActualPoint.y / _joystickRadius;
 	
 	//BORDERS
 	//X limits
@@ -186,9 +189,9 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	/*
 	//check if our object does not reach the screen borders
 	if (cPoint.x >= xMinLimit && cPoint.x <= xMaxLimit && cPoint.y >= yMinLimit && cPoint.y <= yMaxLimit) {
-		//N = point * 1 / kJoystickRadius
-		CGFloat xSpeedRatio = _controllerActualPoint.x / kJoystickRadius;
-		CGFloat ySpeedRatio = _controllerActualPoint.y / kJoystickRadius;
+		//N = point * 1 / _joystickRadius
+		CGFloat xSpeedRatio = _controllerActualPoint.x / _joystickRadius;
+		CGFloat ySpeedRatio = _controllerActualPoint.y / _joystickRadius;
 		
 		l_controlledObject.position = ccp(l_controlledObject.position.x + xSpeedRatio, l_controlledObject.position.y + ySpeedRatio);
 	}
@@ -201,6 +204,8 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	joystick.normalTexture	= [[CCTextureCache sharedTextureCache] addImage:filename1];
 	joystick.selectedTexture= [[CCTextureCache sharedTextureCache] addImage:filename2];
 	joystick.controllerSpriteFile = controllerSprite;
+    joystick.speedRatio     = 1.0;                  //added default values which is 1
+    joystick.joystickRadius = kJoystickRadius;      //added default values for joystick radius which is 50
 	return joystick;
 }
 
@@ -228,13 +233,13 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
     NSLog(@"Actual Distance - %f", actualPointDistance);
     
 	//check if the touch point is within the joystick container's radius
-	if (actualPointDistance <= kJoystickRadius){
+	if (actualPointDistance <= _joystickRadius){
 	//if (CGRectContainsPoint(rect, location)) {
 		CCLOG(@"Joystick Touched");
 		
         //call delegate method
         //check if _delegate conforms to the protocol and responds to the selector
-        if ([_delegate conformsToProtocol:@protocol(JoystickDelegate)]) {
+        if ([_delegate conformsToProtocol:@protocol(ZJoystickDelegate)]) {
             if([_delegate respondsToSelector:@selector(joystickControlBegan)]) {
                 [_delegate performSelector:@selector(joystickControlBegan)];
             }
@@ -299,7 +304,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 		
         //execute our delegate method
         //check if _delegate conforms to the protocol and responds to the selector
-        if ([_delegate conformsToProtocol:@protocol(JoystickDelegate)]) {
+        if ([_delegate conformsToProtocol:@protocol(ZJoystickDelegate)]) {
             if([_delegate respondsToSelector:@selector(joystickControlMoved)]) {
                 [_delegate performSelector:@selector(joystickControlMoved)];
             }
@@ -312,7 +317,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 		CGFloat actualPointDistance = getDistanceBetweenTwoPoints(self.position, location);
 		
 		//check if touch is inside the 
-		if (actualPointDistance <= kJoystickRadius){
+		if (actualPointDistance <= _joystickRadius){
 			//if (CGRectContainsPoint(rect, location)) {
 			
 			//Speed ratio
@@ -333,7 +338,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 			
 			//Speed ratio
 			//radius of joystick
-			self.controllerActualDistance = kJoystickRadius;
+			self.controllerActualDistance = _joystickRadius;
 			
 			//we compute our SLOPE 
 			//Slope are the same in ever points that passes the slope line
@@ -346,14 +351,14 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 			//if we have an Infinite slope result 
 			//means that we are in the 4th Quadrant
 			if (slope == -INFINITY) {
-				point = ccp(0 , -kJoystickRadius);
+				point = ccp(0 , -_joystickRadius);
 			//3rd Quadrant
 			} else if (slope == INFINITY) {
-				point = ccp(0 , kJoystickRadius);
+				point = ccp(0 , _joystickRadius);
 			//1st & 2nd Quadrant
 			} else {
 				//no matter if SLOPE and DISTANCE are (-), it would still result a positive value since they are computed by ^2
-				point = getCPoint(slope, kJoystickRadius);
+				point = getCPoint(slope, _joystickRadius);
 			}
 			
 			//X > or < 0
@@ -401,7 +406,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	
     //execute our delegate method
     //check if _delegate conforms to the protocol and responds to the selector
-    if ([_delegate conformsToProtocol:@protocol(JoystickDelegate)]) {
+    if ([_delegate conformsToProtocol:@protocol(ZJoystickDelegate)]) {
         if([_delegate respondsToSelector:@selector(joystickControlEnded)]) {
             [_delegate performSelector:@selector(joystickControlEnded)];
         }
