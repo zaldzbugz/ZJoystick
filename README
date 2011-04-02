@@ -24,7 +24,8 @@ JoystickContainer_norm.png - active state (Joystick Container, serves as the Joy
 HOW TO USE
 
 1.) import Joystick header file -> #import "ZJoystick.h"
-2.) then add these codes below to any of your scenes
+2.) Add <ZJoystickDelegate> in the interface declaration
+3.) then add these codes below to any of your scenes
 
 //------------------------------------------------------START------------------------------------------------
 
