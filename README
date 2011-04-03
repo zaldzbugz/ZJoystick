@@ -1,5 +1,5 @@
 //COCOS2D ZJoystick API (Version1.2)
-[Version 1.1 Updates]
+[Version 1.2 Updates]
 1.) Updated protocol declaration
 2.) Updated protocol method calls
 3.) Added variable to set values for Joystick Radius
