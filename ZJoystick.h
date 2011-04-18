@@ -27,7 +27,8 @@ typedef enum {
 -(void)joystickControlBegan;
 -(void)joystickControlMoved;
 -(void)joystickControlEnded;
-
+//version 1.3
+-(void)joystickControlDidUpdate:(id)joystick toXSpeedRatio:(CGFloat)xSpeedRatio toYSpeedRatio:(CGFloat)ySpeedRatio;
 @end
 
 #define kJoystickRadius 50.0f
@@ -51,6 +52,7 @@ typedef enum {
     
     //version 1.2
     CGFloat                 _joystickRadius;
+    int                     _joystickTag;
 }
 
 @property(nonatomic, retain) CCTexture2D				*normalTexture;
@@ -70,6 +72,7 @@ typedef enum {
 
 //version 1.2
 @property(nonatomic, assign) CGFloat                    joystickRadius;
+@property(nonatomic, assign) int                        joystickTag;
 
 -(CGRect) getBoundingRect;
 -(CGFloat)getYMinimumLimit;
