@@ -10,6 +10,8 @@
 
 @interface ZJoystick (PrivateMethods)
 CGFloat getDistanceBetweenTwoPoints(CGPoint point1,CGPoint point2);
+//version 1.3
+-(CGSize)getControlledObjectSize;
 @end
 
 @implementation ZJoystick
@@ -29,6 +31,8 @@ CGFloat getDistanceBetweenTwoPoints(CGPoint point1,CGPoint point2);
 
 //version 1.2
 @synthesize joystickRadius          = _joystickRadius;
+//version 1.3
+@synthesize joystickTag             = _joystickTag;
 
 //m = y2-y1 / x2-x1
 CGFloat getSlope(CGPoint point1, CGPoint point2) {
@@ -80,7 +84,7 @@ CGFloat getDistanceBetweenTwoPoints(CGPoint point1,CGPoint point2)
 }
 
 tControlQuadrant getQuadrantForPoint (CGPoint point) {
-
+    
 	tControlQuadrant controlQuadrant;
 	
 	//Quadrants setup
@@ -98,34 +102,45 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 };
 
 -(CGFloat)getYMinimumLimit {
-	CCSprite *l_controlledObject = (CCSprite *)_controlledObject;
-	CGSize  cSize  = l_controlledObject.contentSize;
+    //version 1.3
+    CGSize cSize = [self getControlledObjectSize];
+	
 	return cSize.height/2;
 }
 
 -(CGFloat)getYMaximumLimit {
 	CGSize winSize  = [CCDirector sharedDirector].winSize;
-	CCSprite *l_controlledObject = (CCSprite *)_controlledObject;
-	CGSize  cSize  = l_controlledObject.contentSize;
-	
+    //version 1.3
+    CGSize cSize = [self getControlledObjectSize];
+    
 	return winSize.height - cSize.height/2;
 }
 
 -(CGFloat)getXMinimumLimit {
-	CCSprite *l_controlledObject = (CCSprite *)_controlledObject;
-	CGSize  cSize  = l_controlledObject.contentSize;
+    //version 1.3
+    CGSize cSize = [self getControlledObjectSize];
+    
 	return cSize.width/2;
 }
 
 -(CGFloat)getXMaximumLimit {
 	CGSize winSize  = [CCDirector sharedDirector].winSize;
-	CCSprite *l_controlledObject = (CCSprite *)_controlledObject;
-	CGSize  cSize  = l_controlledObject.contentSize;
+    //version 1.3
+    CGSize cSize = [self getControlledObjectSize];
+    
 	return winSize.width - cSize.width/2;
 }
 
-#pragma mark -
+//version 1.3
+-(CGSize)getControlledObjectSize {
+    //version 1.3
+	CCSprite *controlledObject = (CCSprite *)_controlledObject;
+    CGSize  cSize = controlledObject.contentSize;
+    
+    return cSize;
+}
 
+#pragma mark -
 #pragma mark Scheduler methods
 -(void)activateScheduler {
 	[self schedule:@selector(update:)];
@@ -138,9 +153,10 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 #pragma mark -
 #pragma mark Set Timers For Objects to move
 -(void)update:(ccTime) dt {
-	CCSprite *l_controlledObject = (CCSprite *)_controlledObject;
-	
-	CGPoint cPoint = l_controlledObject.position;
+    
+	CCSprite *controlledObject = (CCSprite *)_controlledObject;
+    
+	CGPoint cPoint =  controlledObject.position;
 	
 	CGFloat xMinLimit = [self getXMinimumLimit];
 	CGFloat xMaxLimit = [self getXMaximumLimit];
@@ -152,28 +168,28 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	CGFloat xSpeedRatio = _controllerActualPoint.x / _joystickRadius;
 	CGFloat ySpeedRatio = _controllerActualPoint.y / _joystickRadius;
 	
-	//BORDERS
-	//X limits
-	if (cPoint.x < xMinLimit) {
-		if (xSpeedRatio < 0) {
-			xSpeedRatio = 0;
-		}
-	} else if (cPoint.x > xMaxLimit) {
-		if (xSpeedRatio > 0) {
-			xSpeedRatio = 0;
-		}
-	}
-	
-	//Y limits
-	if (cPoint.y < yMinLimit) {
-		if (ySpeedRatio < 0) {
-			ySpeedRatio = 0;
-		}
-	} else if (cPoint.y > yMaxLimit) {
-		if (ySpeedRatio > 0) {
-			ySpeedRatio = 0;
-		}
-	}
+    //BORDERS
+    //X limits
+    if (cPoint.x < xMinLimit) {
+        if (xSpeedRatio < 0) {
+            xSpeedRatio = 0;
+        }
+    } else if (cPoint.x > xMaxLimit) {
+        if (xSpeedRatio > 0) {
+            xSpeedRatio = 0;
+        }
+    }
+    
+    //Y limits
+    if (cPoint.y < yMinLimit) {
+        if (ySpeedRatio < 0) {
+            ySpeedRatio = 0;
+        }
+    } else if (cPoint.y > yMaxLimit) {
+        if (ySpeedRatio > 0) {
+            ySpeedRatio = 0;
+        }
+    }
 	
     //if we dont set speed ration, we give it deafault value to 1
     if (_speedRatio == 0) {
@@ -183,19 +199,18 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
     xSpeedRatio = xSpeedRatio * _speedRatio;
     ySpeedRatio = ySpeedRatio * _speedRatio;
     
-	//position object
-	l_controlledObject.position = ccp(l_controlledObject.position.x + xSpeedRatio, l_controlledObject.position.y + ySpeedRatio);
-	
-	/*
-	//check if our object does not reach the screen borders
-	if (cPoint.x >= xMinLimit && cPoint.x <= xMaxLimit && cPoint.y >= yMinLimit && cPoint.y <= yMaxLimit) {
-		//N = point * 1 / _joystickRadius
-		CGFloat xSpeedRatio = _controllerActualPoint.x / _joystickRadius;
-		CGFloat ySpeedRatio = _controllerActualPoint.y / _joystickRadius;
-		
-		l_controlledObject.position = ccp(l_controlledObject.position.x + xSpeedRatio, l_controlledObject.position.y + ySpeedRatio);
-	}
-	 */
+    //version 1.3
+    if (controlledObject) {
+        //position object
+        controlledObject.position = ccp(controlledObject.position.x + xSpeedRatio, controlledObject.position.y + ySpeedRatio);
+    }
+    //call protocol method here to gain speed ratios
+    //check if _delegate conforms to the protocol and responds to the selector
+    if ([_delegate conformsToProtocol:@protocol(ZJoystickDelegate)]) {
+        if([_delegate respondsToSelector:@selector(joystickControlDidUpdate:toXSpeedRatio:toYSpeedRatio:)]) {
+            [_delegate joystickControlDidUpdate:self toXSpeedRatio:xSpeedRatio toYSpeedRatio:ySpeedRatio];
+        }
+    }
 }
 
 +(id)joystickNormalSpriteFile:(NSString *)filename1 selectedSpriteFile:(NSString *)filename2 controllerSpriteFile:(NSString *)controllerSprite{
@@ -234,7 +249,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
     
 	//check if the touch point is within the joystick container's radius
 	if (actualPointDistance <= _joystickRadius){
-	//if (CGRectContainsPoint(rect, location)) {
+        //if (CGRectContainsPoint(rect, location)) {
 		CCLOG(@"Joystick Touched");
 		
         //call delegate method
@@ -267,7 +282,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 		
 		//jostick button controller
 		_controller.position = ccp(self.contentSize.width/2 + actualPoint.x, self.contentSize.height/2 + actualPoint.y);
-
+        
 		//add fadeIn animation
 		id inAction = [CCFadeIn actionWithDuration:kControlActionInterval];
 		[_controller runAction:inAction];
@@ -284,22 +299,22 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	
 	CCLOG(@"Quadrant = %d", _controlQuadrant);
 	
-
+    
 	
 	return NO; //we return yes to gain access control of MOVE and ENDED delegate methods
 }
 
- - (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event{
+- (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event{
 	CCLOG(@"Joystick ccTouchMoved");
 	CGPoint location	= [touch locationInView: [touch view]];
 	location			= [[CCDirector sharedDirector] convertToGL:location];
 	//CGRect rect			= [self getBoundingRect];
-
+    
 	
 	CGPoint actualPoint = CGPointMake(location.x - self.position.x, location.y - self.position.y);
 	
 	
-	 
+    
 	if (isCurrentlyControlling) {
 		
         //execute our delegate method
@@ -309,7 +324,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
                 [_delegate performSelector:@selector(joystickControlMoved)];
             }
         }
-
+        
 		//[_delegate joystickControlMoved];
 		
 		//actual distance of joystick and the touch point
@@ -352,10 +367,10 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 			//means that we are in the 4th Quadrant
 			if (slope == -INFINITY) {
 				point = ccp(0 , -_joystickRadius);
-			//3rd Quadrant
+                //3rd Quadrant
 			} else if (slope == INFINITY) {
 				point = ccp(0 , _joystickRadius);
-			//1st & 2nd Quadrant
+                //1st & 2nd Quadrant
 			} else {
 				//no matter if SLOPE and DISTANCE are (-), it would still result a positive value since they are computed by ^2
 				point = getCPoint(slope, _joystickRadius);
@@ -365,7 +380,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 			//We check our actual points if we reach points of in 3rd Quadrant
 			if (actualPoint.x < 0 && actualPoint.y >= 0) {
 				point = CGPointMake(-1 * point.x, point.y * -1);
-			//We check our actual points if we reach points of in 4th Quadrant
+                //We check our actual points if we reach points of in 4th Quadrant
 			} else if (actualPoint.x < 0 && actualPoint.y <= 0) {
 				point = CGPointMake(-1 * point.x, -1 * point.y);
 			}
@@ -383,7 +398,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 			//we position out controller
 			_controller.position = controllerPoint;
 		}
-	
+        
 		//Quadrants
 		self.controlQuadrant = getQuadrantForPoint(actualPoint);
 		
@@ -476,7 +491,7 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	self.selectedTexture    = nil;
 	self.controlledObject   = nil;
 	self.delegate           = nil;
-   
+    
 	[super dealloc];
 }
 
