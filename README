@@ -20,6 +20,7 @@ See example below:
 }
 3.) Modified some methods to be more readable
 4.) Updated MyJoystick example.
+5.) Added MIT License
 -------------------------------------------------------------
 //COCOS2D ZJoystick API (Version1.2)
 [Version 1.2 Updates]
