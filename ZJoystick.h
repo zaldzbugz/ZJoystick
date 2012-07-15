@@ -27,7 +27,7 @@
 #import "cocos2d.h"
 
 typedef enum {
-	kJLowerLeft,
+	kLowerLeft,
 	kLowerRight,
 }tJoystickPlacement;
 
@@ -38,12 +38,19 @@ typedef enum {
 	kFourthQuadrant,
 }tControlQuadrant;
 
+//version 1.4
+typedef enum{
+    kXAxisConstrain,
+    kYAxisConstrain,
+    kNoConstrain
+}tAxisConstrain;
+
 @protocol ZJoystickDelegate<NSObject>
 
 @optional
--(void)joystickControlBegan;
--(void)joystickControlMoved;
--(void)joystickControlEnded;
+-(void)joystickControlBegan:(id)joystick;
+-(void)joystickControlMoved:(id)joystick;
+-(void)joystickControlEnded:(id)joystick;
 //version 1.3
 -(void)joystickControlDidUpdate:(id)joystick toXSpeedRatio:(CGFloat)xSpeedRatio toYSpeedRatio:(CGFloat)ySpeedRatio;
 @end
@@ -70,6 +77,8 @@ typedef enum {
     //version 1.2
     CGFloat                 _joystickRadius;
     int                     _joystickTag;
+    //version 1.4
+    tAxisConstrain          _axisConstrain;
 }
 
 @property(nonatomic, retain) CCTexture2D				*normalTexture;
@@ -90,6 +99,9 @@ typedef enum {
 //version 1.2
 @property(nonatomic, assign) CGFloat                    joystickRadius;
 @property(nonatomic, assign) int                        joystickTag;
+
+//version 1.4
+@property(nonatomic, assign) tAxisConstrain             axisConstrain;
 
 -(CGRect) getBoundingRect;
 -(CGFloat)getYMinimumLimit;
