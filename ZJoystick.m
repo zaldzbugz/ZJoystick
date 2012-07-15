@@ -50,6 +50,8 @@ CGFloat getDistanceBetweenTwoPoints(CGPoint point1,CGPoint point2);
 @synthesize joystickRadius          = _joystickRadius;
 //version 1.3
 @synthesize joystickTag             = _joystickTag;
+//version 1.4
+@synthesize axisConstrain           = _axisConstrain;
 
 //m = y2-y1 / x2-x1
 CGFloat getSlope(CGPoint point1, CGPoint point2) {
@@ -238,6 +240,8 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 	joystick.controllerSpriteFile = controllerSprite;
     joystick.speedRatio     = 1.0;                  //added default values which is 1
     joystick.joystickRadius = kJoystickRadius;      //added default values for joystick radius which is 50
+    
+    joystick.axisConstrain = kNoConstrain;
 	return joystick;
 }
 
@@ -272,8 +276,8 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
         //call delegate method
         //check if _delegate conforms to the protocol and responds to the selector
         if ([_delegate conformsToProtocol:@protocol(ZJoystickDelegate)]) {
-            if([_delegate respondsToSelector:@selector(joystickControlBegan)]) {
-                [_delegate performSelector:@selector(joystickControlBegan)];
+            if([_delegate respondsToSelector:@selector(joystickControlBegan:)]) {
+                [_delegate joystickControlBegan:self];
             }
         }
         
@@ -298,7 +302,14 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 		[self setTexture:_normalTexture];
 		
 		//jostick button controller
-		_controller.position = ccp(self.contentSize.width/2 + actualPoint.x, self.contentSize.height/2 + actualPoint.y);
+        //version 1.4
+        if(self.axisConstrain == kNoConstrain){
+            _controller.position = ccp(self.contentSize.width/2 + actualPoint.x, self.contentSize.height/2 + actualPoint.y);
+        }else if(self.axisConstrain == kXAxisConstrain){
+            _controller.position = ccp(self.contentSize.width/2 + actualPoint.x, self.contentSize.height/2);
+        }else if(self.axisConstrain == kYAxisConstrain){
+            _controller.position = ccp(self.contentSize.width/2, self.contentSize.height/2 + actualPoint.y);
+        }
         
 		//add fadeIn animation
 		id inAction = [CCFadeIn actionWithDuration:kControlActionInterval];
@@ -322,7 +333,6 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 }
 
 - (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event{
-	CCLOG(@"Joystick ccTouchMoved");
 	CGPoint location	= [touch locationInView: [touch view]];
 	location			= [[CCDirector sharedDirector] convertToGL:location];
 	//CGRect rect			= [self getBoundingRect];
@@ -337,8 +347,8 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
         //execute our delegate method
         //check if _delegate conforms to the protocol and responds to the selector
         if ([_delegate conformsToProtocol:@protocol(ZJoystickDelegate)]) {
-            if([_delegate respondsToSelector:@selector(joystickControlMoved)]) {
-                [_delegate performSelector:@selector(joystickControlMoved)];
+            if([_delegate respondsToSelector:@selector(joystickControlMoved:)]) {
+                [_delegate joystickControlMoved:self];
             }
         }
         
@@ -360,7 +370,15 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 			self.controllerActualPoint = actualPoint;
 			
 			//jostick button controller
-			_controller.position = ccp(self.contentSize.width/2 + actualPoint.x, self.contentSize.height/2 + actualPoint.y);
+            //version 1.4
+            if(self.axisConstrain == kNoConstrain){
+                _controller.position = ccp(self.contentSize.width/2 + actualPoint.x, self.contentSize.height/2 + actualPoint.y);
+            }else if(self.axisConstrain == kXAxisConstrain){
+                _controller.position = ccp(self.contentSize.width/2 + actualPoint.x, self.contentSize.height/2);
+            }else if(self.axisConstrain == kYAxisConstrain){
+                _controller.position = ccp(self.contentSize.width/2, self.contentSize.height/2 + actualPoint.y);
+            }
+            
 			//call delegate method
 			
 		} else {
@@ -403,7 +421,15 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 			}
 			
 			//we add the position of joystick since we need to position the controller surrounding the joystick
-			CGPoint controllerPoint = CGPointMake(point.x + self.contentSize.width/2, point.y + self.contentSize.height/2);
+            //version 1.4
+            CGPoint controllerPoint;
+            if(self.axisConstrain == kNoConstrain){
+                controllerPoint = CGPointMake(point.x + self.contentSize.width/2, point.y + self.contentSize.height/2);
+            }else if(self.axisConstrain == kXAxisConstrain){
+                controllerPoint = CGPointMake(point.x + self.contentSize.width/2, self.contentSize.height/2);
+            }else if(self.axisConstrain == kYAxisConstrain){
+                controllerPoint = CGPointMake(self.contentSize.width/2, point.y + self.contentSize.height/2);
+            }
 			
 			//CCLOG(@"POINT VALUE = (%f, %f)", point.x, point.y);
 			//CCLOG(@"SQUAREROOT of 1 = %f",sqrt(1.0f));		
@@ -439,8 +465,8 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
     //execute our delegate method
     //check if _delegate conforms to the protocol and responds to the selector
     if ([_delegate conformsToProtocol:@protocol(ZJoystickDelegate)]) {
-        if([_delegate respondsToSelector:@selector(joystickControlEnded)]) {
-            [_delegate performSelector:@selector(joystickControlEnded)];
+        if([_delegate respondsToSelector:@selector(joystickControlEnded:)]) {
+            [_delegate joystickControlEnded:self];
         }
     }
     
