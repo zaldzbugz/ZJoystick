@@ -1,5 +1,5 @@
 -------------------------------------------------------------
-//COCOS2D ZJoystick API (Version1.4)
+//COCOS2D ZJoystick API (Version1.4) by Christopher Valles
 1.) Added "axisConstrain" variable; this is used to setup a constrain on a specific axis and the joystick will only be able to move on the constrained axis.
 Available constrains are:
 
