@@ -154,7 +154,8 @@ tControlQuadrant getQuadrantForPoint (CGPoint point) {
 -(CGSize)getControlledObjectSize {
     //version 1.3
 	CCSprite *controlledObject = (CCSprite *)_controlledObject;
-    CGSize  cSize = controlledObject.contentSize;
+    //version 1.5
+    CGSize cSize = [controlledObject boundingBox].size;
     
     return cSize;
 }

@@ -1,4 +1,7 @@
 -------------------------------------------------------------
+//COCOS2D ZJoystick API (Version1.5) by Thomas Christensen
+1.) Made the automatic restrained area of the controlled sprite calculated on the basis of the sprite's bounding rectangle instead of it's content size. Bounding rect is the size after applying scaling etc. so if sprite gfx is scaled between iPad and iPhone, this will still work.
+-------------------------------------------------------------
 //COCOS2D ZJoystick API (Version1.4) by Christopher Valles
 1.) Added "axisConstrain" variable; this is used to setup a constrain on a specific axis and the joystick will only be able to move on the constrained axis.
 Available constrains are:
